@@ -1,65 +1,42 @@
 # psyqvsce README
 
-This is the README for your extension "psyqvsce". After writing up a brief description, we recommend including the following sections.
+the psyqvsce extension for Visual Studios Code adds support for the psyq sdk, that hopes to help aid ps1 game development
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+the psyqvsce extensions features range from being able to compile and run your game with one click, also able to auto compile and run on line edits, quick tools for opening the provided tools with psyq such as timtool, vagedit etc withnot needing to open file explorer, same with documentation all is labeled and able to be opened with the pdf reader of your choice with a few mouse clicks. as of now the only emulator planned for support is pcsxredux
 
-For example if there is an image subfolder under your extension project workspace:
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+> Tip: You can use the Psyq Help command to list the features within vscode and more!
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+This requires axios and adm-zip you can easly install these by running the command below in the terminal
+`npm install axios adm-zip`
+
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
+psyqvsce does have settings such as:
 
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `psyqvsce.selectedEmulator`: Select the emulator to use.
+* `psyqvsce.autoC`: Enable automatic compilation and running of C code.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+`Project stil in development not ready for use`
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+### V0
+In Development
 
 ---
 
-## Working with Markdown
+As of right now no shortcuts are planned or implemented, but will be reconsidered once the extension is ready for release:
 
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+* None
 
 **Enjoy!**
