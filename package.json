@@ -1,0 +1,62 @@
+{
+  "name": "psyqvsce",
+  "displayName": "PSYQVSCE",
+  "description": "A Helpful enviroment that allows compiling and running of c code for ps1 games, quick options for psyq tools, and much nore",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Psyqvsce",
+      "properties": {
+        "psyqvsce.selectedEmulator": {
+          "type": "string",
+          "default": "PCSX-Redux (Recommended)",
+          "description": "Select the emulator to use",
+          "enum": [
+            "PCSX-Redux (Recommended)",
+            "template extra"
+          ]
+        },
+        "psyqvsce.autoC": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic compilation and running of C code"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "psyqvsce.psyqHelp",
+        "title": "PSYQ Help"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.89.0",
+    "@vscode/test-cli": "^0.0.8",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.12",
+    "axios": "^1.6.8"
+  }
+}
