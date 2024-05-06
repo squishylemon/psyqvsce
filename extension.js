@@ -20,10 +20,9 @@ function locatePsyqFolder() {
 			if (folderName.toLowerCase() === 'psyq') {
 				
 				const extensionPath = __dirname;
-				const targetFolder = path.join(extensionPath, 'psyq');
-				
+
 				// Copy the "psyq" folder to the extension's directory
-				fs.copyFile(selectedFolder, targetFolder, (err) => {
+				fs.copyFile(selectedFolder, extensionPath, (err) => {
 					if (err) {
 						vscode.window.showErrorMessage(`Error copying "psyq" folder: ${err.message}`);
 					} else {
@@ -45,6 +44,7 @@ function locatePsyqFolder() {
 
 function quitExtension() {
 	disposable.dispose();
+	vscode.window.showInformationMessage(`Psyqvsce Unloaded!`);
 }
 
 function downloadAndExtractPsyq() {
@@ -92,6 +92,28 @@ function downloadAndExtractPsyq() {
                 }
             });
     });
+}
+
+function checkEmulatorFolder() {
+    const extensionPath = __dirname;
+    const emulatorSetting = vscode.workspace.getConfiguration('psyqvsce').get('selectedEmulator');
+
+    if (emulatorSetting === 'PCSX-Redux (Recommended)') {
+        const pcsxReduxFolderPath = path.join(extensionPath, 'pcsxredux');
+
+        if (!fs.existsSync(pcsxReduxFolderPath)) {
+            vscode.window.showInformationMessage('The "PCSX-Redux" folder was not found. Would you like to install it?', 'Yes', 'No')
+                .then(selection => {
+                    if (selection === 'Yes') {
+                        // Code to download and install the "PCSX-Redux" folder
+                        // You can provide instructions or a link for the user to download it
+                    }
+					if (selection === 'No') {
+						quitExtension();
+					}
+                });
+        }
+    }
 }
 
 function checkPsyqFolder() {
