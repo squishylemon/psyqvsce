@@ -1,17 +1,17 @@
 # psyqvsce README
 
-the psyqvsce extension for Visual Studios Code adds support for the psyq sdk, that hopes to help aid ps1 game development
+The psyqvsce extension for Visual Studio Code adds support for the PsyQ SDK, aiming to aid PS1 game development.
 
 ## Features
 
-the psyqvsce extensions features range from being able to compile and run your game with one click, also able to auto compile and run on line edits, quick tools for opening the provided tools with psyq such as timtool, vagedit etc withnot needing to open file explorer, same with documentation all is labeled and able to be opened with the pdf reader of your choice with a few mouse clicks. as of now the only emulator planned for support is pcsxredux
+The psyqvsce extension's features range from compiling and running your game with one click to automatically compiling and running on line edits. It also offers quick tools for opening provided tools with PsyQ, such as Timtool, Vagedit, etc., without needing to open the file explorer. Similarly, all documentation is labeled and can be opened with the PDF reader of your choice with just a few mouse clicks. As of now, the only emulator planned for support is PCSX-Redux.
 
 
-> Tip: You can use the Psyq Help command to list the features within vscode and more!
+> Tip: You can use the Psyq Help command to list the features within VS Code and more!
 
 ## Requirements
 
-This requires axios and adm-zip you can easly install these by running the command below in the terminal
+This extension requires Axios and Adm-Zip. You can easily install these by running the command below in the terminal:
 `npm install axios adm-zip`
 
 
@@ -26,7 +26,7 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-`Project stil in development not ready for use`
+`Project still in development, not ready for use.`
 
 ## Release Notes
 
@@ -35,7 +35,7 @@ In Development
 
 ---
 
-As of right now no shortcuts are planned or implemented, but will be reconsidered once the extension is ready for release:
+As of right now, no shortcuts are planned or implemented, but will be reconsidered once the extension is ready for release:
 
 * None
 
