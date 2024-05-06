@@ -47,50 +47,6 @@ function quitExtension() {
 	disposable.dispose();
 }
 
-function downloadAndExtractPsyqAlt() {
-    const extensionPath = __dirname;
-    const zipFilePath = path.join(extensionPath, 'psyq.zip');
-    
-
-    const psyqDownloadUrl = 'https://archive.org/download/psyq-sdk/PSYQ_SDK.zip';
-
-    // Download the psyq.zip file with progress tracking
-    axios({
-        url: psyqDownloadUrl,
-        method: 'GET',
-        responseType: 'stream',
-        onDownloadProgress: progressEvent => {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            vscode.window.setStatusBarMessage(`Downloading psyq.zip: ${percentCompleted}%`, 1000);
-        }
-    }).then(response => {
-        // Save the downloaded zip file
-        response.data.pipe(fs.createWriteStream(zipFilePath)).on('close', () => {
-            // Extract the contents of psyq.zip
-            const zip = new AdmZip(zipFilePath);
-            zip.extractAllTo(extensionPath, /*overwrite*/ true);
-
-            // Notify the user
-            vscode.window.showInformationMessage(`"psyq.zip" downloaded and extracted successfully.`);
-        });
-    }).catch(error => {
-        vscode.window.showErrorMessage(`Failed to download "psyq.zip": ${error.message}`, "Try Again", "Cancel")
-            .then(choice => {
-                switch (choice) {
-                    case "Try Again":
-                        downloadAndExtractPsyq();
-                        break;
-                    case "Cancel":
-                        quitExtension();
-                        break;
-                    default:
-                        break;
-                }
-            });
-    });
-}
-
-
 function downloadAndExtractPsyq() {
     const extensionPath = __dirname;
     const zipFilePath = path.join(extensionPath, 'psyq.zip');
@@ -111,21 +67,22 @@ function downloadAndExtractPsyq() {
         // Save the downloaded zip file
         response.data.pipe(fs.createWriteStream(zipFilePath)).on('close', () => {
             // Extract the contents of psyq.zip
+			vscode.window.setStatusBarMessage(`Extracting psyq.zip...`, 1000);
             const zip = new AdmZip(zipFilePath);
             zip.extractAllTo(extensionPath, /*overwrite*/ true);
 
             // Notify the user
             vscode.window.showInformationMessage(`"psyq.zip" downloaded and extracted successfully.`);
+			fs.rm(zipFilePath, function(err) {
+				vscode.window.showErrorMessage(`Issue removing the psyq.zip, ${err}`);
+			});
         });
     }).catch(error => {
-        vscode.window.showErrorMessage(`Failed to download "psyq.zip": ${error.message}`, "Try Again", "Alternate URL", "Cancel")
+        vscode.window.showErrorMessage(`Failed to download "psyq.zip": ${error.message}`, "Try Again", "Cancel")
             .then(choice => {
                 switch (choice) {
                     case "Try Again":
                         downloadAndExtractPsyq();
-                        break;
-                    case "Alternate URL":
-                        downloadAndExtractPsyqAlt();
                         break;
                     case "Cancel":
                         quitExtension();
@@ -136,7 +93,6 @@ function downloadAndExtractPsyq() {
             });
     });
 }
-
 
 function checkPsyqFolder() {
 	// Get the extension directory
