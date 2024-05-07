@@ -14,6 +14,13 @@
   ],
   "main": "./extension.js",
   "contributes": {
+    "debuggers": [
+      {
+          "type": "cppvsdbg",
+          "label": "Compile and Run [PSYQ]",
+          "command": "extension.compileAndRun"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "Psyqvsce",

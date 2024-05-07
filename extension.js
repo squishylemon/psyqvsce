@@ -220,6 +220,13 @@ function checkPsyqFolder() {
 	}
 }
 
+function compileAndRunCCode() {
+    // Execute the compile and run process for C code
+    // This might involve running tasks defined in tasks.json or executing shell commands
+    // For example, you could use child_process.spawn() to execute the compiler and then run the compiled program
+}
+
+
 function activate(context) {
 	// checks emulator also after checking psyq / also checks bios file
 	checkPsyqFolder();
@@ -254,6 +261,12 @@ function activate(context) {
 
 		panel.webview.html = getWebviewContent(description, features);
 	});
+
+	disposable = vscode.commands.registerCommand('extension.debugCCode', () => {
+		// Call the function to compile and run the C code
+		compileAndRunCCode();
+	});
+	
 
 	function getWebviewContent(description, features) {
 		return `
