@@ -47,6 +47,54 @@ function quitExtension() {
 	vscode.window.showInformationMessage(`Psyqvsce Unloaded!`);
 }
 
+function downloadAndExtractPCSXRedux() {
+	const extensionPath = __dirname;
+    const zipFilePath = path.join(extensionPath, 'pcsxredux.zip');
+    
+
+    const pcsxDownloadUrl = 'https://archive.org/download/pcsxredux/pcsxredux.zip';
+
+    // Download the psyq.zip file with progress tracking
+    axios({
+        url: pcsxDownloadUrl,
+        method: 'GET',
+        responseType: 'stream',
+        onDownloadProgress: progressEvent => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            vscode.window.setStatusBarMessage(`Downloading pcsxredux.zip: ${percentCompleted}%`, 1000);
+        }
+    }).then(response => {
+        // Save the downloaded zip file
+        response.data.pipe(fs.createWriteStream(zipFilePath)).on('close', () => {
+            // Extract the contents of psyq.zip
+			vscode.window.setStatusBarMessage(`Extracting pcsxredux.zip...`, 1000);
+            const zip = new AdmZip(zipFilePath);
+            zip.extractAllTo(extensionPath, /*overwrite*/ true);
+
+            // Notify the user
+            vscode.window.showInformationMessage(`"pcsxredux.zip" downloaded and extracted successfully.`);
+			fs.rm(zipFilePath, function(err) {
+				return;
+			});
+			checkEmulatorFolder();
+        });
+    }).catch(error => {
+        vscode.window.showErrorMessage(`Failed to download "pcsxredux.zip": ${error.message}`, "Try Again", "Cancel")
+            .then(choice => {
+                switch (choice) {
+                    case "Try Again":
+                        downloadAndExtractPsyq();
+                        break;
+                    case "Cancel":
+                        quitExtension();
+                        break;
+                    default:
+                        break;
+                }
+            });
+    });
+}
+
 function downloadAndExtractPsyq() {
     const extensionPath = __dirname;
     const zipFilePath = path.join(extensionPath, 'psyq.zip');
@@ -74,8 +122,9 @@ function downloadAndExtractPsyq() {
             // Notify the user
             vscode.window.showInformationMessage(`"psyq.zip" downloaded and extracted successfully.`);
 			fs.rm(zipFilePath, function(err) {
-				vscode.window.showErrorMessage(`Issue removing the psyq.zip, ${err}`);
+				return;
 			});
+			checkPsyqFolder();
         });
     }).catch(error => {
         vscode.window.showErrorMessage(`Failed to download "psyq.zip": ${error.message}`, "Try Again", "Cancel")
@@ -102,18 +151,47 @@ function checkEmulatorFolder() {
         const pcsxReduxFolderPath = path.join(extensionPath, 'pcsxredux');
 
         if (!fs.existsSync(pcsxReduxFolderPath)) {
-            vscode.window.showInformationMessage('The "PCSX-Redux" folder was not found. Would you like to install it?', 'Yes', 'No')
+            vscode.window.showErrorMessage('The "PCSX-Redux" folder was not found. Would you like to install it?', 'Yes', 'No')
                 .then(selection => {
                     if (selection === 'Yes') {
-                        // Code to download and install the "PCSX-Redux" folder
-                        // You can provide instructions or a link for the user to download it
+                        downloadAndExtractPCSXRedux();
                     }
 					if (selection === 'No') {
 						quitExtension();
 					}
                 });
-        }
+        }else {
+			checkBiosFileLocation();
+		}
     }
+}
+
+function checkBiosFileLocation() {
+	const selectedBiosPath = vscode.workspace.getConfiguration().get('psyqvsce.selectedBios');
+  
+	if (selectedBiosPath) {
+	  // Check if the file exists
+  
+	  if (fs.existsSync(selectedBiosPath)) {
+		// Check if it's a .zip file
+		if (path.extname(selectedBiosPath) === '.BIN') {
+		  // BIOS file found, do nothing
+		  vscode.window.showInformationMessage('BIOS file found.');
+		} else {
+		  vscode.window.showWarningMessage('The selected file is not a .bin file. Please select a valid BIOS file.');
+		}
+	  } else {
+		// BIOS file not found
+		vscode.window.showErrorMessage('BIOS file not found. Please check the selected path in settings.');
+		// Option to open settings
+		vscode.commands.executeCommand('workbench.action.openSettings');
+	  }
+	} else {
+	  // No BIOS file path specified in settings
+	  vscode.window.showErrorMessage('No BIOS file path specified in settings.');
+	  // Option to open settings
+	  vscode.commands.executeCommand('workbench.action.openSettings');
+	}
 }
 
 function checkPsyqFolder() {
@@ -137,12 +215,16 @@ function checkPsyqFolder() {
 				quitExtension();
 			}
 		});
+	}else {
+		checkEmulatorFolder();
 	}
 }
 
 function activate(context) {
+	// checks emulator also after checking psyq / also checks bios file
 	checkPsyqFolder();
-	console.log('Congratulations, your extension "psyqvsce" is now active!');
+	
+	console.log('Congratulations, psyqvsce is now active!');
 
 	vscode.workspace.onDidChangeConfiguration(event => {
 		if (event.affectsConfiguration('psyqvsce.emulatorPath')) {

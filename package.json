@@ -27,6 +27,15 @@
             "template extra"
           ]
         },
+        "psyqvsce.selectedBios": {
+          "type": "string",
+          "default": "Path/to/the/BIOS/file",
+          "description": "Path to the BIOS file for the emulator",
+          "button": {
+            "text": "Select BIOS File",
+            "action": "openFile"
+          }
+        },        
         "psyqvsce.autoC": {
           "type": "boolean",
           "default": true,
